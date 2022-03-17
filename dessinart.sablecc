@@ -1,0 +1,37 @@
+Package dessinart.syntax;
+
+Helpers
+    char = [32..126]; // all chars
+    digit = ['0'..'9'];
+    eol = 13 | 10 | 13 10; // end of line.
+    letter = [['a'..'z']+['A'..'Z']];
+    string_char = [[32..126] - '"'] | '"' '"';
+
+Tokens
+    // Operator tokens.
+    assign = '=';
+    divide = '/';
+    minus = '-';
+    plus = '+';
+    star = '*';
+
+    // Identifier tokens.
+    blank = (' ' | eol | 9)+;
+    comment = '//' char* eol;
+    ident = letter(letter | digit)*;
+    number = digit+;
+    string = '"' string_char* '"';
+
+    // Keywords.
+    drawCircle = 'drawCircle';
+    drawLine = 'drawLine';
+    drawRectangle = 'drawRectangle';
+    drawString = 'drawString';
+    drawSquare = 'drawSquare';
+    drawTriangle = 'drawTriangle';
+
+
+
+
+Ignored Tokens
+    blank, comment;
