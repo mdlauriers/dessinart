@@ -1,4 +1,4 @@
-package dessinart;
+package DessinART;
 
 import java.io.*;
 
