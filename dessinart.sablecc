@@ -1,0 +1,126 @@
+Package dessinart.syntax;
+
+Helpers
+    char = [32..126]; // all chars
+    digit = ['0'..'9'];
+    eol = 13 | 10 | 13 10; // end of line.
+    letter = [['a'..'z']+['A'..'Z']];
+    string_char = [[32..126] - '"'] | '"' '"';
+
+Tokens
+    // Operator tokens.
+    assign = '=';
+    divide = '/';
+    l_br = '{';
+    l_par = '(';
+    minus = '-';
+    plus = '+';
+    r_br = '}';
+    r_par = ')';
+    star = '*';
+    sc = ';';
+    comma = ',';
+    dot = '.';
+    not = '!';
+
+
+    // Identifier tokens.
+    blank = (' ' | eol | 9)+;
+    comment = '//' char* eol;
+    comment_multi = '/*' char* '*/' eol;
+    ident = letter(letter | digit)*;
+    number = digit+;
+
+    // General keywords.
+    do = 'do';
+    end = 'end';
+    for = 'for';
+    while = 'while';
+
+    false = 'false';
+    true = 'true';
+
+    elif = 'elif';
+    if = 'if';
+    then = 'then';
+
+    return = 'return';
+
+    // Language specific keywords.
+    canvas = 'canvas';
+    pencil = 'pencil';
+    color = 'color';
+    define = 'define';
+    import = 'import';
+    dessinart = 'dessinart';
+    sketch = 'sketch';
+    func = 'func';
+    int = 'int';
+    double = 'double';
+    boolean = 'boolean';
+
+    // Language specific functions
+    replace = 'replace';
+    move = 'move';
+    draw = 'draw';
+    draw_to = 'drawTo';
+    set_color = 'setColor';
+    set_width = 'setWidth';
+    power = 'power';
+    round = 'round';
+    ceil = 'ceil';
+    floor = 'floor';
+    sin = 'sin';
+    cos = 'cos';
+    tan = 'tan';
+    int_to_double = 'intToDouble';
+    exec = '$exec';
+    lib = '$lib';
+    //filename = char+ dot? char*;
+
+Ignored Tokens
+     blank, comment, comment_multi;
+
+
+Productions
+    program = block;
+
+    block = [instrs]:instr*;
+
+    instr =
+        {decl} type ident assign exp sc |
+        {define_canvas} define canvas l_par args? r_par sc |
+        {define_pencil} define pencil l_par args? r_par sc;
+
+    exp =
+        {add} [left]:exp plus [right]:neg |
+        {sub} [left]:exp minus [right]:neg |
+        {div} [left]:exp divide [right]:neg |
+        {mul} [left]:exp star [right]: neg |
+        {simple} neg;
+
+    neg =
+        {not} not [exp]:neg |
+        {term} term;
+
+    term =
+        {number} number |
+        {var} ident |
+        {true} true |
+        {false} false;
+
+    type =
+        {int} int |
+        {boolean} boolean |
+        {canvas} canvas |
+        {pencil} pencil;
+        // {color} color;
+
+    args =
+        arg [additional_arg]:additional_arg*;
+
+    additional_arg =
+        comma arg;
+
+    arg =
+        int;
