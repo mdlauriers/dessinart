@@ -23,6 +23,10 @@ Tokens
     dot = '.';
     not = '!';
 
+    eq = '==';
+    lt = '<';
+    gt = '>';
+
 
     // Identifier tokens.
     blank = (' ' | eol | 9)+;
@@ -93,10 +97,16 @@ Productions
         {define_pencil} define pencil l_par args? r_par sc;
 
     exp =
-        {add} [left]:exp plus [right]:neg |
-        {sub} [left]:exp minus [right]:neg |
-        {div} [left]:exp divide [right]:neg |
-        {mul} [left]:exp star [right]: neg |
+        {eq} [left]:exp eq [right]:sum |
+        {lt} [left]:exp lt [right]:sum |
+        {gt} [left]:exp gt [right]:sum |
+        {simple} sum;
+
+    sum =
+        {add} [left]:sum plus [right]:neg |
+        {sub} [left]:sum minus [right]:neg |
+        {div} [left]:sum divide [right]:neg |
+        {mul} [left]:sum star [right]: neg |
         {simple} neg;
 
     neg =
@@ -112,9 +122,7 @@ Productions
     type =
         {int} int |
         {boolean} boolean |
-        {canvas} canvas |
-        {pencil} pencil;
-        // {color} color;
+        {color} color;
 
     args =
         arg [additional_arg]:additional_arg*;
