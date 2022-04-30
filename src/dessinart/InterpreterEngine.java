@@ -1,10 +1,13 @@
-package dessinart;
+package DessinART;
 
-import dessinart.syntax.analysis.DepthFirstAdapter;
-import dessinart.syntax.node.ADefineCanvasInstr;
-import dessinart.syntax.node.AProgram;
-import dessinart.syntax.node.Node;
-import dessinart.value.Value;
+import DessinART.syntax.analysis.*;
+import DessinART.syntax.lexer.*;
+import DessinART.syntax.node.*;
+import DessinART.syntax.parser.*;
+
+import DessinART.value.*;
+import DessinART.gui.*;
+
 
 public class InterpreterEngine extends DepthFirstAdapter {
 
@@ -26,7 +29,7 @@ public class InterpreterEngine extends DepthFirstAdapter {
         return result;
     }
 
-    @Override
+    /*@Override
     public void caseAProgram(AProgram node) {
         visit(node.getBlock());
     }
@@ -34,5 +37,5 @@ public class InterpreterEngine extends DepthFirstAdapter {
     @Override
     public void caseADefineCanvasInstr(ADefineCanvasInstr node) {
 
-    }
+    }*/
 }

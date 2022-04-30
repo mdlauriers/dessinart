@@ -1,4 +1,4 @@
-package dessinart.value;
+package DessinART.value;
 
 public class IntValue extends Value {
 
