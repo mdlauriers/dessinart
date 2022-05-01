@@ -9,8 +9,9 @@ dessinart {
     int changex = 0;
     setColor((250, 0, 0));
     while (changex < 500) {
-        draw(changex, 250);
-        changex = changex + 1;
+        replace(changex, 250);
+        draw(0, 10);
+        changex = changex + 100;
     }
 
     setColor((0, 0, 0));
@@ -21,5 +22,34 @@ dessinart {
     while(i<10){
         replace(250, 250+i);
         draw(0,0);
+        i = i + 1;
+    }
+
+    color vert = (0, 250, 0);
+    setColor(vert);
+    int var1 = 10;
+    int var2 = 5;
+    int var3 = 10 - (5*2);
+    replace(var3, var3);
+
+    while (false) {
+        setColor((0, 0, 255));
+    }
+
+    boolean monBool = true;
+
+    while (monBool) {
+        setWidth(100);
+        drawTo(0, 0);
+        monBool = false;
+    }
+
+    replace(500, 500);
+    boolean monBool2 = true;
+
+    if (monBool2) {
+        setWidth(100);
+        drawTo(500, 500);
+        monBool = false;
     }
 }

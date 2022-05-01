@@ -112,7 +112,7 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
     @Override
     public void caseADefs(ADefs node) { // Define et création du canvas
-        System.out.println("passe ici!");
+        //System.out.println("passe ici!");
         ADefcan defineCanvas = (ADefcan) node.getDefcan();
 
         TNumber tokenWidth = defineCanvas.getWidth();;
@@ -261,7 +261,7 @@ public class InterpreterEngine extends DepthFirstAdapter {
         int x = ((IntValue) valX).getValue();
         int y = ((IntValue) valY).getValue();
 
-        System.out.println("Pos du crayon: x :" + x + " y: " + y);
+        //System.out.println("Pos du crayon: x :" + x + " y: " + y);
 
         this.monDessin.bougerCrayonAbs(x, y);
     }
@@ -324,31 +324,6 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 
-    /*@Override
-                                public void caseACallTerm(ACallTerm) {
-                                    // TODO
-                                }*/
-    @Override
-    public void caseAArg(AArg node) {
-        this.argumentValues.add(eval(node.getExp()));
-    }
-
-    @Override
-    public void caseAColorTerm(AColorTerm node) {
-        Value red = eval(node.getRed());
-        Value green = eval(node.getGreen());
-        Value blue = eval(node.getBlue());
-
-        int vRed = ((IntValue) red).getValue();
-        int vGreen = ((IntValue) green).getValue();
-        int vBlue = ((IntValue) blue).getValue();
-
-        if((vRed < 0 && vRed > 255) && (vGreen < 0 && vGreen > 255) && (vBlue < 0 && vBlue > 255)){
-            throw new InterpreterException(this.currentFrame, node.getLPar(), "Les valeurs de la couleur doivent être comprises entre 0 et 255");
-        }
-
-        this.result = new ColorValue(vRed, vGreen, vBlue);
-    }
 
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -461,7 +436,11 @@ public class InterpreterEngine extends DepthFirstAdapter {
         this.result = new IntValue(monResultat);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////
 
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Term
+    //////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void caseANumberTerm(ANumberTerm node) {
         try{
@@ -472,10 +451,72 @@ public class InterpreterEngine extends DepthFirstAdapter {
     }
 
     @Override
+    public void caseAVarTerm(AVarTerm node) {
+        String identifier = node.getIdent().getText();
+        Value value = this.currentFrame.getValue(identifier);
+        if (value == null) {
+            throw new InterpreterException(this.currentFrame, node.getIdent(),
+                    "La variable " + identifier + " n'a pas de valeur.");
+        }
+        this.result = value;
+    }
+
+    @Override
+    public void caseABoolTerm(ABoolTerm node) {
+        this.result = eval (node.getBoole ());
+    }
+
+    @Override
+    public void caseAParTerm(AParTerm node) {
+        this.result = eval (node.getExp ());
+    }
+
+    @Override
+    public void caseAColorTerm(AColorTerm node) {
+        Value red = eval(node.getRed());
+        Value green = eval(node.getGreen());
+        Value blue = eval(node.getBlue());
+
+        int vRed = ((IntValue) red).getValue();
+        int vGreen = ((IntValue) green).getValue();
+        int vBlue = ((IntValue) blue).getValue();
+
+        if((vRed < 0 && vRed > 255) && (vGreen < 0 && vGreen > 255) && (vBlue < 0 && vBlue > 255)){
+            throw new InterpreterException(this.currentFrame, node.getLPar(), "Les valeurs de la couleur doivent être comprises entre 0 et 255");
+        }
+
+        this.result = new ColorValue(vRed, vGreen, vBlue);
+    }
+
+    @Override
+    public void caseAMathfctsTerm(AMathfctsTerm node) {
+        this.result = eval (node.getMathfcts ());
+    }
+
+    /*@Override
+    public void caseACallTerm(ACallTerm) {
+        // TODO
+     }*/
+
+    @Override
+    public void caseAArg(AArg node) {
+        this.argumentValues.add(eval(node.getExp()));
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Main
+    //////////////////////////////////////////////////////////////////////////
+    @Override
     public void caseAMain(AMain node) {
         visit(node.getBlock());
     }
+    ////////////////////////////////////////////////////////////////////////////
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Exp
+    // -----------------------------------------------------------------------
     @Override
     public void caseAEqExp(
             AEqExp node) {
@@ -504,6 +545,16 @@ public class InterpreterEngine extends DepthFirstAdapter {
     }
 
     @Override
+    public void caseASimpleExp(ASimpleExp node) {
+        this.result = eval (node.getSum ());
+    }
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Sum
+    // -------------------------------------------------------------------------------
+    @Override
     public void caseAAddSum(
             AAddSum node) {
 
@@ -520,4 +571,91 @@ public class InterpreterEngine extends DepthFirstAdapter {
         throw new InterpreterException(this.currentFrame, node.getPlus(),
                 "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
     }
+
+    @Override
+    public void caseASubSum(ASubSum node) {
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+
+        if (left instanceof IntValue) {
+            this.result = new IntValue(getNumberLeft(left, node.getMinus ())
+                    - getNumberRight(right, node.getMinus ()));
+
+            return;
+        }
+
+        throw new InterpreterException(this.currentFrame, node.getMinus (),
+                "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
+    }
+
+    @Override
+    public void caseADivSum(ADivSum node) {
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+
+        if (left instanceof IntValue) {
+
+            int divise = getNumberLeft (left, node.getDivide ());
+            int diviseur = getNumberRight (right, node.getDivide ( ));
+
+            int resultat = Math.round (divise/diviseur);
+
+            this.result = new IntValue(resultat);
+
+            return;
+        }
+
+        throw new InterpreterException(this.currentFrame, node.getDivide (),
+                "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
+    }
+
+    @Override
+    public void caseAMulSum(AMulSum node) {
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+
+        if (left instanceof IntValue) {
+
+            int divise = getNumberLeft (left, node.getStar ());
+            int diviseur = getNumberRight (right, node.getStar ());
+
+            int resultat = divise * diviseur;
+
+            this.result = new IntValue(resultat);
+
+            return;
+        }
+
+        throw new InterpreterException(this.currentFrame, node.getStar (),
+                "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
+    }
+
+    @Override
+    public void caseASimpleSum(ASimpleSum node) {
+        this.result = eval (node.getNeg ());
+    }
+    ////////////////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public void caseANotNeg(ANotNeg node) {
+        this.result = BoolValue.get(!evalBoolean(node.getExp(), node.getNot()));
+    }
+    /*@Override
+    public void caseATermNeg)(ATermNeg node){}*/
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Boole (boolean)
+    @Override
+    public void caseATrueBoole(ATrueBoole node) {
+        boolean vrai = true;
+        this.result = new BoolValue(vrai);
+    }
+
+    @Override
+    public void caseAFalseBoole(AFalseBoole node) {
+        boolean faux = false;
+        this.result = new BoolValue(faux);
+    }
+    ///////////////////////////////////////////////////////////////////////////
 }

@@ -9,7 +9,7 @@ public class BoolValue extends Value {
     // attribut
     private boolean value;
 
-    private BoolValue(boolean value){
+    public BoolValue(boolean value){
         this.value = value;
     }
 
