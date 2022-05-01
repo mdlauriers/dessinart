@@ -35,12 +35,6 @@ public class Main {
             Parser parser = new Parser(new Lexer(reader));
             Node tree = parser.parse();
 
-
-
-            // trouve les attributs
-            //FieldFinder fieldFinder = new FieldFinder(classFinder);
-            //fieldFinder.visit(tree);
-
             // trouve les fonctions et procédures
             FunctionFinder functionFinder = new FunctionFinder();
             functionFinder.visit(tree);
@@ -50,13 +44,11 @@ public class Main {
             varchecks.visit(tree);
 
             //Interprétation
-            //InterpreterEngine interp = new InterpreterEngine(classFinder, functionFinder);
-            //interp.visit(tree);
+            InterpreterEngine interp = new InterpreterEngine(functionFinder);
+            interp.visit(tree);
 
-            // Génération d'un programme Java équivalent
-            /*CodeGenerator codeGenerator
-                    = new CodeGenerator(classFinder, functionFinder);
-            codeGenerator.visit(tree);*/
+            // Affichage final Canvas
+            //interp.montrerDessin();
         }
         catch (FileNotFoundException e) {
             System.err.println("ERREUR: Le fichier \"" + filename

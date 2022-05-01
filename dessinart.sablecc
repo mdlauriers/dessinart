@@ -87,7 +87,7 @@ Ignored Tokens
 
 
 Productions
-    program = defs main decl*;
+    program = defs main decls;
 
     defs = defcan defpen;
 
@@ -118,6 +118,7 @@ Productions
     	{setcolor} set_color l_par [color]:exp r_par |
     	{setwidth} set_width l_par [width]:exp r_par;
 
+    decls = decl*;
 
     decl =
     	{fct} fctdecl sc |

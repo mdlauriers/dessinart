@@ -1,9 +1,25 @@
 define canvas(500,500);
 define pencil(10,250,250);
 
-
-
 dessinart {
-    color t = (10);
+    int a = 2;
+    replace(250, 250);
+    setWidth(50);
+    draw(0, 0);
+    int changex = 0;
+    setColor((250, 0, 0));
+    while (changex < 500) {
+        draw(changex, 250);
+        changex = changex + 1;
+    }
 
+    setColor((0, 0, 0));
+    draw(0,0);
+
+    setWidth(20);
+    int i = 1;
+    while(i<10){
+        replace(250, 250+i);
+        draw(0,0);
+    }
 }

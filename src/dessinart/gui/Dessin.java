@@ -18,6 +18,8 @@ public class Dessin extends JFrame{
 	// private Color backGroungColor = new Color(255, 255, 255); // si on veut!
 	private ArrayList<Ligne> lignes;
 
+	/*public Dessin(){}*/
+
 	public Dessin(int x, int y, int penX, int penY, int lineWidth) {
 		this.crayon = new Position(penX, penY);
 		this.trait = lineWidth;
@@ -34,8 +36,10 @@ public class Dessin extends JFrame{
 	}
 
 	public void montrer() { // afficher notre canvas (JFrame)
-		setVisible(true);
+		setResizable(false);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE); //?
+		setVisible(true);
 	}
 
 	public void paint(Graphics g) { // dessiner dans le canvas(JFrame) - appelé automatiquement
@@ -89,5 +93,9 @@ public class Dessin extends JFrame{
 
 	public void setPenColor(Color couleur) { // setColor (gestion d'erreur ici?)
 		this.lineColor = new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue());
+	}
+
+	public void setDimensions(int width, int height){
+		setSize(width, height);
 	}
 }

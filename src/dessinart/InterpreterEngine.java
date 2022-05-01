@@ -31,20 +31,54 @@ public class InterpreterEngine extends DepthFirstAdapter {
     ////////////////////////////////////////////////////////
     private Dessin monDessin;
 
+    public InterpreterEngine(FunctionFinder functionFinder) {
+        this.functionFinder = functionFinder;
+    }
+
     public void visit(Node node){
         if(node != null) node.apply(this);
     }
 
-    private Value eval(Node node){
-        if(this.result != null) throw new RuntimeException("Une erreur non prévue est survenue dans l'interpréteur.");
+    private Value eval(
+            Node node) {
+
+        if (this.result != null) {
+            throw new RuntimeException("Erreur inattendue dans l'intérpéteur.");
+        }
 
         visit(node);
 
-        if(this.result == null) throw new RuntimeException("Une erreur non prévue est survenue dans l'interpréteur.");
+        if (this.result == null) {
+            throw new RuntimeException("Erreur inattendue dans l'intérpéteur.");
+        }
 
         Value result = this.result;
         this.result = null;
         return result;
+    }
+
+    private int getNumberLeft(
+            Value value,
+            Token token) {
+
+        if (!(value instanceof IntValue)) {
+            throw new InterpreterException(this.currentFrame, token,
+                    "L'expression de gauche n'est pas un nombre entier.");
+        }
+
+        return ((IntValue) value).getValue();
+    }
+
+    private int getNumberRight(
+            Value value,
+            Token token) {
+
+        if (!(value instanceof IntValue)) {
+            throw new InterpreterException(this.currentFrame, token,
+                    "L'expression de droite n'est pas un nombre entier.");
+        }
+
+        return ((IntValue) value).getValue();
     }
 
     private boolean evalBoolean(
@@ -64,47 +98,80 @@ public class InterpreterEngine extends DepthFirstAdapter {
         this.monDessin.montrer();
     }
 
-    /*@Override
+    @Override
     public void caseAProgram(AProgram node) {
-        visit(node.getBlock());
+        // visit(node.getBlock());
+
+        this.currentFrame = new Frame(this.currentFrame, null);
+        visit(node.getDefs());
+        visit(node.getDecls());
+        visit(node.getMain());
+        this.currentFrame = null;
+        montrerDessin();
     }
 
     @Override
-    public void caseADefineCanvasInstr(ADefineCanvasInstr node) {
-
-    }*/
-
-    @Override
     public void caseADefs(ADefs node) { // Define et création du canvas
+        System.out.println("passe ici!");
         ADefcan defineCanvas = (ADefcan) node.getDefcan();
 
-        TNumber tokenWidth = defineCanvas.getWidth();
-        Value valWidth = eval(tokenWidth);
-        int width = ((IntValue) valWidth).getValue();
+        TNumber tokenWidth = defineCanvas.getWidth();;
+
+        //Value valWidth = eval(tokenWidth);
+
+        int width = Integer.parseInt(tokenWidth.getText());
 
         TNumber tokenHeight = defineCanvas.getHeight();
-        Value valHeight = eval(tokenHeight);
-        int height = ((IntValue) valHeight).getValue();
+        //Value valHeight = eval(tokenHeight);
+        int height = Integer.parseInt(tokenHeight.getText());
 
         ADefpen definePen = (ADefpen) node.getDefpen();
 
         TNumber tokenPenWitdh = definePen.getWidth();
-        Value valPenWidth = eval(tokenPenWitdh);
-        int penWidth = ((IntValue) valPenWidth).getValue();
+        //Value valPenWidth = eval(tokenPenWitdh);
+        int penWidth = Integer.parseInt(tokenPenWitdh.getText());
 
         TNumber tokenPosX = definePen.getPosx();
-        Value valPosX = eval(tokenPosX);
-        int posX = ((IntValue) valPosX).getValue();
+        //Value valPosX = eval(tokenPosX);
+        int posX = Integer.parseInt(tokenPosX.getText());
 
         TNumber tokenPosY = definePen.getPosy();
-        Value valPosY = eval(tokenPosY);
-        int posY = ((IntValue) valPosY).getValue();
+        //Value valPosY = eval(tokenPosY);
+        int posY = Integer.parseInt(tokenPosY.getText());
+
+        //this.result = new IntValue(2);
 
         // construction du canvas
         this.monDessin = new Dessin(width, height, posX, posY, penWidth);
-
+        this.monDessin.montrer();
     }
 
+    /*@Override
+    public void caseADefcan(ADefcan node) {
+        System.out.println("passe icitte");
+        Value valWidth = eval(node.getWidth());
+        Value valHeight = eval(node.getHeight());
+
+        int width = ((IntValue) valWidth).getValue();
+        int height = ((IntValue) valHeight).getValue();
+
+        this.monDessin.setDimensions(width, height);
+    }*/
+
+    /*@Override
+    public void caseADefpen(ADefpen node) {
+        Value valPenWidth = eval(node.getWidth());
+        int penWidth = ((IntValue) valPenWidth).getValue();
+
+        Value valPosX = eval(node.getPosx());
+        int posX = ((IntValue) valPosX).getValue();
+
+        Value valPosY = eval(node.getPosy());
+        int posY = ((IntValue) valPosY).getValue();
+
+        this.monDessin.setPenWidth(penWidth);
+        this.monDessin.bougerCrayonAbs(posX, posY);
+    }*/
 
     // -------------------------------------------------------------------------
     // Instructions
@@ -193,6 +260,8 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
         int x = ((IntValue) valX).getValue();
         int y = ((IntValue) valY).getValue();
+
+        System.out.println("Pos du crayon: x :" + x + " y: " + y);
 
         this.monDessin.bougerCrayonAbs(x, y);
     }
@@ -390,5 +459,65 @@ public class InterpreterEngine extends DepthFirstAdapter {
         int monResultat = (int) Math.tan((double) angle);
 
         this.result = new IntValue(monResultat);
+    }
+
+
+    @Override
+    public void caseANumberTerm(ANumberTerm node) {
+        try{
+            this.result = new IntValue(Integer.parseInt(node.getNumber().getText()));
+        } catch (NumberFormatException e){
+            throw new InterpreterException(this.currentFrame, node.getNumber(), "Le nombre entré est trop grand!");
+        }
+    }
+
+    @Override
+    public void caseAMain(AMain node) {
+        visit(node.getBlock());
+    }
+
+    @Override
+    public void caseAEqExp(
+            AEqExp node) {
+
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+        this.result = BoolValue.get(left.equals(right));
+    }
+
+    @Override
+    public void caseALtExp(
+            ALtExp node) {
+
+        int left = getNumberLeft(eval(node.getLeft()), node.getLt());
+        int right = getNumberRight(eval(node.getRight()), node.getLt());
+        this.result = BoolValue.get(left < right);
+    }
+
+    @Override
+    public void caseAGtExp(
+            AGtExp node) {
+
+        int left = getNumberLeft(eval(node.getLeft()), node.getGt());
+        int right = getNumberRight(eval(node.getLeft()), node.getGt());
+        this.result = BoolValue.get(left > right);
+    }
+
+    @Override
+    public void caseAAddSum(
+            AAddSum node) {
+
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+
+        if (left instanceof IntValue) {
+            this.result = new IntValue(getNumberLeft(left, node.getPlus())
+                    + getNumberRight(right, node.getPlus()));
+
+            return;
+        }
+
+        throw new InterpreterException(this.currentFrame, node.getPlus(),
+                "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
     }
 }
