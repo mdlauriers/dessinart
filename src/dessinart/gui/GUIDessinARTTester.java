@@ -22,6 +22,14 @@ public class GUIDessinARTTester {
 		monDessinArt.setPenColor(255, 0, 0); // ?????
 		monDessinArt.setPenWidth(50);
 		monDessinArt.drawRel(250, 0);
+		monDessinArt.bougerCrayonAbs(375, 250);
+		monDessinArt.setPenWidth(10);
+		monDessinArt.setPenColor(50, 100, 200);
+		monDessinArt.drawAbs(250, 125);
+		monDessinArt.drawAbs(125, 250);
+		monDessinArt.drawAbs(250, 375);
+		monDessinArt.drawAbs(375, 250);
+
 
 		// l'afficher
 		monDessinArt.montrer();

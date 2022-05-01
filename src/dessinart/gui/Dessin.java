@@ -12,7 +12,7 @@ public class Dessin extends JFrame{
 	///////////////////////////////////////////////////////////////
 
 	private Position crayon;
-	private int trait; // width
+	private int trait; // width du crayon
 	// couleur actuelle
 	private Color lineColor = new Color(0, 0, 0);
 	// private Color backGroungColor = new Color(255, 255, 255); // si on veut!
@@ -85,5 +85,9 @@ public class Dessin extends JFrame{
 
 	public void setPenColor(int r, int g, int b) { // setColor (gestion d'erreur ici?)
 		this.lineColor = new Color(r, g, b);
+	}
+
+	public void setPenColor(Color couleur) { // setColor (gestion d'erreur ici?)
+		this.lineColor = new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue());
 	}
 }

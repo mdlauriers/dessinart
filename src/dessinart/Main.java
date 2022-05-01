@@ -1,8 +1,19 @@
-package DessinART;
+package dessinart;
+
+import dessinart.FunctionFinder;
+import dessinart.VariableAndReturnChecker;
+import dessinart.exceptions.*;
+import dessinart.syntax.lexer.Lexer;
+import dessinart.syntax.lexer.LexerException;
+import dessinart.syntax.node.Node;
+import dessinart.syntax.parser.Parser;
+import dessinart.syntax.parser.ParserException;
 
 import java.io.*;
 
 public class Main {
+
+    private final static String LANGUAGE_NAME = "DessinART";
     public static void main(String[] args) {
 
         // Check if .dsa file is passed as arg.
@@ -18,15 +29,59 @@ public class Main {
             System.exit(1);
         }
 
-        try{
+        try {
+            PushbackReader reader
+                    = new PushbackReader(new FileReader(filename), 1024);
+            Parser parser = new Parser(new Lexer(reader));
+            Node tree = parser.parse();
 
-            PushbackReader reader =
-                    new PushbackReader(new FileReader(filename), 1024);
 
-        } catch (FileNotFoundException e){
+
+            // trouve les attributs
+            //FieldFinder fieldFinder = new FieldFinder(classFinder);
+            //fieldFinder.visit(tree);
+
+            // trouve les fonctions et procédures
+            FunctionFinder functionFinder = new FunctionFinder();
+            functionFinder.visit(tree);
+
+            VariableAndReturnChecker varchecks
+                    = new VariableAndReturnChecker(functionFinder);
+            varchecks.visit(tree);
+
+            //Interprétation
+            //InterpreterEngine interp = new InterpreterEngine(classFinder, functionFinder);
+            //interp.visit(tree);
+
+            // Génération d'un programme Java équivalent
+            /*CodeGenerator codeGenerator
+                    = new CodeGenerator(classFinder, functionFinder);
+            codeGenerator.visit(tree);*/
+        }
+        catch (FileNotFoundException e) {
             System.err.println("ERREUR: Le fichier \"" + filename
                     + "\" n'a pas été trouvé.");
             System.exit(1);
         }
+        catch (IOException e) {
+            System.err.println("ERREUR D'ENTRÉE/SORTIE: " + e.getMessage());
+            System.exit(1);
+        }
+        catch (LexerException e) {
+            System.err.println("ERREUR LEXICALE: " + e.getMessage());
+            System.exit(1);
+        }
+        catch (ParserException e) {
+            System.err.println("ERREUR DE SYNTAXE: " + e.getMessage());
+            System.exit(1);
+        }
+        catch (SemanticException e) {
+            System.err.println("ERREUR SÉMANTIQUE: " + e.getMessage());
+            System.exit(1);
+        }
+        /*catch (InterpreterException e) {
+            System.err.println("ERREUR D'EXECUTION: " + e.getMessage());
+            System.exit(1);
+        }*/
     }
 }

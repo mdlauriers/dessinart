@@ -1,4 +1,4 @@
-Package DessinART.syntax;
+Package dessinart.syntax;
 
 Helpers
     char = [32..126]; // all chars
@@ -27,14 +27,6 @@ Tokens
     lt = '<';
     gt = '>';
 
-
-    // Identifier tokens.
-    blank = (' ' | eol | 9)+;
-    comment = '//' char* eol;
-    comment_multi = '/*' char* '*/' eol;
-    ident = letter(letter | digit)*;
-    number = digit+;
-
     // General keywords.
     do = 'do';
     end = 'end';
@@ -56,7 +48,7 @@ Tokens
     color = 'color';
     define = 'define';
     import = 'import';
-    dessinart = 'DessinART';
+    dessinart = 'dessinart';
     sketch = 'sketch';
     func = 'func';
     int = 'int';
@@ -80,6 +72,13 @@ Tokens
     tan = 'tan';
     log = 'log';
 
+    // Identifier tokens.
+    blank = (' ' | eol | 9)+;
+    comment = '//' char* eol;
+    comment_multi = '/*' char* '*/' eol;
+    ident = letter(letter | digit)*;
+    number = digit+;
+
 
     //filename = char+ dot? char*;
 
@@ -88,31 +87,29 @@ Ignored Tokens
 
 
 Productions
-    program = defines main decls;
-    
+    program = defs main decl*;
 
-    
-    defines = defcan defpen;
-	
+    defs = defcan defpen;
+
     defcan = define canvas l_par [width]:number comma [height]:number r_par sc;
-        
+
     // ajouter gestion de conflit avec les fonctions standards du language
     defpen = define pencil l_par [width]:number [comma1]:comma [posx]:number [comma2]:comma [posy]:number r_par sc;
-    
+
     main = dessinart l_br block r_br;
 
     block = [instrs]:instr*;
-    
+
 	//exp contient call
     instr =
-    	{decl} vardecl sc |
+    	{decl} type ident assign exp sc |
     	{assign} ident assign exp sc |
-    	{exp} exp sc |
     	{penfct} penfct sc |
     	{if} if l_par exp r_par l_br block r_br |
     	{while} while l_par exp r_par l_br block r_br |
-    	{return} return exp? sc;
-    	
+    	{return} return exp? sc |
+    	{call} ident l_par args? r_par;
+
     penfct =
     	{replace} replace l_par [pos_x]:exp comma [pos_y]:exp r_par |
     	{move} move l_par [dist_x]:exp comma [dist_y]:exp r_par |
@@ -120,24 +117,22 @@ Productions
     	{draw} draw l_par [dist_x]:exp comma [dist_y]:exp r_par |
     	{setcolor} set_color l_par [color]:exp r_par |
     	{setwidth} set_width l_par [width]:exp r_par;
-    	
-    	
-    decls = decl*;	
-    	
+
+
     decl =
     	{fct} fctdecl sc |
     	{variable} vardecl sc;
-    	
+
     vardecl = type ident assign exp;
-    
-    fctdecl = 
-    	{fct} func type ident l_par params r_par l_br block r_br |
-    	{proc} sketch ident l_par params r_par l_br block r_br;
-    	
-    	
+
+    fctdecl =
+    	{function} func [return_type]:type [name]:ident l_par params r_par l_br block r_br |
+    	{sketch} sketch [name]:ident l_par params r_par l_br block r_br;
+
+
    	params =
     	param [additional_params]:additional_param*;
-    
+
   	additional_param =
     	comma param;
 
@@ -169,11 +164,11 @@ Productions
         {color} l_par [red]:exp [comma1]:comma [green]:exp [comma2]:comma [blue]:exp r_par |
         {mathfcts} mathfcts |
         {call} ident l_par args? r_par;
-        
+
 	boole =
 		{true} true |
 		{false} false;
-		
+
     type =
         {int} int |
         {boolean} boolean |
@@ -187,7 +182,7 @@ Productions
 
     arg =
         exp;
-        
+
     mathfcts =
     	{power} power l_par [base]:exp comma [expos]:exp r_par |
     	{round5} roundfive l_par [valeur]:exp r_par |
@@ -196,5 +191,4 @@ Productions
     	{log} log l_par [base]:exp comma [logde]:exp r_par |
     	{sin} sin l_par [angle]:exp r_par |
     	{cos} cos l_par [angle]:exp r_par |
-    	{tan} tan l_par [angle]:exp r_par; 
-    	
+    	{tan} tan l_par [angle]:exp r_par;

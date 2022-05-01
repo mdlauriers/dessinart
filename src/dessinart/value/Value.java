@@ -1,4 +1,4 @@
-package DessinART.value;
+package dessinart.value;
 
 public abstract class Value {
 
