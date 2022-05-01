@@ -34,13 +34,13 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
 
     private Type evalType(Node node){
         if(this.resultType != null){
-            throw new RuntimeException("Erreur innattendue dans le vérificateur sémantique");
+            throw new RuntimeException("Erreur inattendue dans la vérificateur sémantique");
         }
 
         visit(node);
 
         if(this.resultType == null){
-            throw new RuntimeException("Erreur innattendue dans le vérification sémantique");
+            throw new RuntimeException("Erreur inattendue dans la vérification sémantique");
         }
 
         Type resultType = this.resultType;
@@ -122,7 +122,6 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
         this.currentScope = this.currentScope.getParent();
     }
 
-
     @Override
     public void caseADeclInstr(ADeclInstr node) {
 
@@ -181,7 +180,6 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
         }
     }
 
-
     @Override
     public void caseACallInstr(ACallInstr node) {
         FunctionInfo functionInfo = this.functionFinder.getFunctionInfo(node.getIdent().getText());
@@ -229,9 +227,6 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
                     "La comparaison de valeurs de types disctincts est interdite.");
         }
 
-        // sauvegarde le type des valeurs comparées pour le générateur de code
-        this.functionFinder.addType(node, left);
-
         this.resultType = Type.BOOL;
     }
 
@@ -274,6 +269,15 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
     }
 
     @Override
+    public void caseAModSum(AModSum node) {
+        Type left = evalType(node.getLeft());
+        Type right = evalType(node.getRight());
+        checkNumberLeft(left, node.getMod());
+        checkNumberRight(right, node.getMod());
+        this.resultType = Type.INT;
+    }
+
+    @Override
     public void caseANotNeg(ANotNeg node) {
         evalTypeBoolean(node.getExp(), node.getNot());
         this.resultType = Type.BOOL;
@@ -281,6 +285,18 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
 
     @Override
     public void caseANumberTerm(ANumberTerm node) {
+        try {
+            Integer.parseInt(node.getNumber().getText());
+            this.resultType = Type.INT;
+        }
+        catch (NumberFormatException e) {
+            throw new SemanticException(node.getNumber(),
+                    "Le nombre indiqué est trop grand.");
+        }
+    }
+
+    @Override
+    public void caseANegativeTerm(ANegativeTerm node) {
         try {
             Integer.parseInt(node.getNumber().getText());
             this.resultType = Type.INT;
@@ -380,25 +396,30 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
 
         checkNumber(base, node.getLPar());
         checkNumber(power, node.getComma());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseARound5Mathfcts(ARound5Mathfcts node) {
         Type exp = evalType(node.getValeur());
         checkNumber(exp, node.getLPar());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseARound10Mathfcts(ARound10Mathfcts node) {
         Type exp = evalType(node.getValeur());
         checkNumber(exp, node.getLPar());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseARound100Mathfcts(ARound100Mathfcts node) {
         Type exp = evalType(node.getValeur());
         checkNumber(exp, node.getLPar());
+        this.resultType = Type.INT;
     }
+
 
     @Override
     public void caseALogMathfcts(ALogMathfcts node) {
@@ -407,24 +428,28 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
 
         checkNumber(exp, node.getLPar());
         checkNumber(lodge, node.getComma());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseASinMathfcts(ASinMathfcts node) {
         Type angle = evalType(node.getAngle());
         checkNumber(angle, node.getLPar());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseACosMathfcts(ACosMathfcts node) {
         Type angle = evalType(node.getAngle());
         checkNumber(angle, node.getLPar());
+        this.resultType = Type.INT;
     }
 
     @Override
     public void caseATanMathfcts(ATanMathfcts node) {
         Type angle = evalType(node.getAngle());
         checkNumber(angle, node.getLPar());
+        this.resultType = Type.INT;
     }
 
 

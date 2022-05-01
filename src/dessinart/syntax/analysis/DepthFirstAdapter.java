@@ -730,6 +730,39 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outASetwidthPenfct(node);
     }
 
+    public void inAWaitPenfct(AWaitPenfct node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAWaitPenfct(AWaitPenfct node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAWaitPenfct(AWaitPenfct node)
+    {
+        inAWaitPenfct(node);
+        if(node.getWait() != null)
+        {
+            node.getWait().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getDelay() != null)
+        {
+            node.getDelay().apply(this);
+        }
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        outAWaitPenfct(node);
+    }
+
     public void inADecls(ADecls node)
     {
         defaultIn(node);
@@ -2006,5 +2039,92 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getRPar().apply(this);
         }
         outATanMathfcts(node);
+    }
+
+    public void inARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node)
+    {
+        defaultIn(node);
+    }
+
+    public void outARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node)
+    {
+        inARandomdeuxcinqcinqMathfcts(node);
+        if(node.getRandomdeuxcinqcinq() != null)
+        {
+            node.getRandomdeuxcinqcinq().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        outARandomdeuxcinqcinqMathfcts(node);
+    }
+
+    public void inARandomhundMathfcts(ARandomhundMathfcts node)
+    {
+        defaultIn(node);
+    }
+
+    public void outARandomhundMathfcts(ARandomhundMathfcts node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseARandomhundMathfcts(ARandomhundMathfcts node)
+    {
+        inARandomhundMathfcts(node);
+        if(node.getRandomcent() != null)
+        {
+            node.getRandomcent().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        outARandomhundMathfcts(node);
+    }
+
+    public void inARandomtenMathfcts(ARandomtenMathfcts node)
+    {
+        defaultIn(node);
+    }
+
+    public void outARandomtenMathfcts(ARandomtenMathfcts node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseARandomtenMathfcts(ARandomtenMathfcts node)
+    {
+        inARandomtenMathfcts(node);
+        if(node.getRandomdix() != null)
+        {
+            node.getRandomdix().apply(this);
+        }
+        if(node.getLPar() != null)
+        {
+            node.getLPar().apply(this);
+        }
+        if(node.getRPar() != null)
+        {
+            node.getRPar().apply(this);
+        }
+        outARandomtenMathfcts(node);
     }
 }

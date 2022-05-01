@@ -31,6 +31,7 @@ public interface Analysis extends Switch
     void caseADrawPenfct(ADrawPenfct node);
     void caseASetcolorPenfct(ASetcolorPenfct node);
     void caseASetwidthPenfct(ASetwidthPenfct node);
+    void caseAWaitPenfct(AWaitPenfct node);
     void caseADecls(ADecls node);
     void caseAFctDecl(AFctDecl node);
     void caseAVariableDecl(AVariableDecl node);
@@ -76,6 +77,9 @@ public interface Analysis extends Switch
     void caseASinMathfcts(ASinMathfcts node);
     void caseACosMathfcts(ACosMathfcts node);
     void caseATanMathfcts(ATanMathfcts node);
+    void caseARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node);
+    void caseARandomhundMathfcts(ARandomhundMathfcts node);
+    void caseARandomtenMathfcts(ARandomtenMathfcts node);
 
     void caseTAssign(TAssign node);
     void caseTDivide(TDivide node);
@@ -121,10 +125,14 @@ public interface Analysis extends Switch
     void caseTDrawTo(TDrawTo node);
     void caseTSetColor(TSetColor node);
     void caseTSetWidth(TSetWidth node);
+    void caseTWait(TWait node);
     void caseTPower(TPower node);
     void caseTRoundfive(TRoundfive node);
     void caseTRoundten(TRoundten node);
     void caseTRoundhund(TRoundhund node);
+    void caseTRandomdeuxcinqcinq(TRandomdeuxcinqcinq node);
+    void caseTRandomcent(TRandomcent node);
+    void caseTRandomdix(TRandomdix node);
     void caseTSin(TSin node);
     void caseTCos(TCos node);
     void caseTTan(TTan node);

@@ -189,6 +189,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseAWaitPenfct(AWaitPenfct node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseADecls(ADecls node)
     {
         defaultCase(node);
@@ -459,6 +465,24 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseARandomhundMathfcts(ARandomhundMathfcts node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseARandomtenMathfcts(ARandomtenMathfcts node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTAssign(TAssign node)
     {
         defaultCase(node);
@@ -723,6 +747,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTWait(TWait node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTPower(TPower node)
     {
         defaultCase(node);
@@ -742,6 +772,24 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTRoundhund(TRoundhund node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRandomdeuxcinqcinq(TRandomdeuxcinqcinq node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRandomcent(TRandomcent node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRandomdix(TRandomdix node)
     {
         defaultCase(node);
     }

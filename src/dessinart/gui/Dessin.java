@@ -18,8 +18,6 @@ public class Dessin extends JFrame{
 	// private Color backGroungColor = new Color(255, 255, 255); // si on veut!
 	private ArrayList<Ligne> lignes;
 
-	/*public Dessin(){}*/
-
 	public Dessin(int x, int y, int penX, int penY, int lineWidth) {
 		this.crayon = new Position(penX, penY);
 		this.trait = lineWidth;
@@ -31,7 +29,6 @@ public class Dessin extends JFrame{
 		} catch (Exception e) {
 			System.out.println("Erreur: Logo introuvable!"); // !
 		}
-
 		setSize(x, y);
 	}
 
@@ -87,15 +84,7 @@ public class Dessin extends JFrame{
 		this.trait = width;
 	}
 
-	public void setPenColor(int r, int g, int b) { // setColor (gestion d'erreur ici?)
-		this.lineColor = new Color(r, g, b);
-	}
-
 	public void setPenColor(Color couleur) { // setColor (gestion d'erreur ici?)
 		this.lineColor = new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue());
-	}
-
-	public void setDimensions(int width, int height){
-		setSize(width, height);
 	}
 }
