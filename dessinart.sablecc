@@ -114,7 +114,7 @@ Productions
     	{if} if l_par exp r_par l_br block r_br |
     	{while} while l_par exp r_par l_br block r_br |
     	{return} return exp? sc |
-    	{call} ident l_par args? r_par;
+    	{call} ident l_par args? r_par sc;
 
     penfct =
     	{replace} replace l_par [pos_x]:exp comma [pos_y]:exp r_par |
@@ -199,9 +199,9 @@ Productions
     	{round10} roundten l_par [valeur]:exp r_par |
     	{round100} roundhund l_par [valeur]:exp r_par |
     	{log} log l_par [base]:exp comma [logde]:exp r_par |
-    	{sin} sin l_par [angle]:exp r_par |
-    	{cos} cos l_par [angle]:exp r_par |
-    	{tan} tan l_par [angle]:exp r_par |
+    	{sin} sin l_par [mul]:exp comma [angle]:exp r_par |
+    	{cos} cos l_par [mul]:exp comma [angle]:exp r_par |
+    	{tan} tan l_par [mul]:exp comma [angle]:exp r_par |
     	{randomdeuxcinqcinq} randomdeuxcinqcinq l_par r_par |
     	{randomhund} randomcent l_par r_par |
     	{randomten} randomdix l_par r_par;

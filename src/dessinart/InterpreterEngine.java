@@ -373,9 +373,12 @@ public class InterpreterEngine extends DepthFirstAdapter {
     @Override
     public void caseASinMathfcts(ASinMathfcts node) {
         Value valAngle = eval(node.getAngle());
-        int angle = ((IntValue) valAngle).getValue();
+        Value valMul = eval(node.getMul());
 
-        int monResultat = (int) Math.sin((double) angle);
+        int angle = ((IntValue) valAngle).getValue();
+        int mul = ((IntValue) valMul).getValue();
+
+        int monResultat = (int) (Math.sin((double) angle)*mul);
 
         this.result = new IntValue(monResultat);
     }
@@ -383,9 +386,12 @@ public class InterpreterEngine extends DepthFirstAdapter {
     @Override
     public void caseACosMathfcts(ACosMathfcts node) {
         Value valAngle = eval(node.getAngle());
-        int angle = ((IntValue) valAngle).getValue();
+        Value valMul = eval(node.getMul());
 
-        int monResultat = (int) Math.cos((double) angle);
+        int angle = ((IntValue) valAngle).getValue();
+        int mul = ((IntValue) valMul).getValue();
+
+        int monResultat = (int) (Math.cos((double) angle)*mul);
 
         this.result = new IntValue(monResultat);
     }
@@ -393,10 +399,13 @@ public class InterpreterEngine extends DepthFirstAdapter {
     @Override
     public void caseATanMathfcts(ATanMathfcts node) {
         Value valAngle = eval(node.getAngle());
+        Value valMul = eval(node.getMul());
+
         int angle = ((IntValue) valAngle).getValue();
+        int mul = ((IntValue) valMul).getValue();
 
-        int monResultat = (int) Math.tan((double) angle);
 
+        int monResultat = (int) (Math.tan((double) angle) * mul);
         this.result = new IntValue(monResultat);
     }
 

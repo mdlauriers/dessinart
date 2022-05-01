@@ -433,22 +433,28 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
 
     @Override
     public void caseASinMathfcts(ASinMathfcts node) {
+        Type mul = evalType(node.getMul());
         Type angle = evalType(node.getAngle());
-        checkNumber(angle, node.getLPar());
+        checkNumber(angle, node.getComma());
+        checkNumber(mul, node.getLPar());
         this.resultType = Type.INT;
     }
 
     @Override
     public void caseACosMathfcts(ACosMathfcts node) {
+        Type mul = evalType(node.getMul());
         Type angle = evalType(node.getAngle());
-        checkNumber(angle, node.getLPar());
+        checkNumber(angle, node.getComma());
+        checkNumber(mul, node.getLPar());
         this.resultType = Type.INT;
     }
 
     @Override
     public void caseATanMathfcts(ATanMathfcts node) {
+        Type mul = evalType(node.getMul());
         Type angle = evalType(node.getAngle());
-        checkNumber(angle, node.getLPar());
+        checkNumber(angle, node.getComma());
+        checkNumber(mul, node.getLPar());
         this.resultType = Type.INT;
     }
 
