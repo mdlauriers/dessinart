@@ -506,4 +506,23 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
         Type exp = evalType (node.getDelay ());
         checkNumber (exp, node.getLPar ());
     }
+
+    @Override
+    public void caseARandomhundMathfcts(ARandomhundMathfcts node) {
+
+        this.resultType = Type.INT;
+    }
+
+    @Override
+    public void caseARandomtenMathfcts(ARandomtenMathfcts node) {
+
+        this.resultType = Type.INT;
+    }
+
+    @Override
+    public void caseARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node) {
+
+        this.resultType = Type.INT;
+    }
+
 }
