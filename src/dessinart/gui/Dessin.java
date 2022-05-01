@@ -87,4 +87,8 @@ public class Dessin extends JFrame{
 	public void setPenColor(Color couleur) { // setColor (gestion d'erreur ici?)
 		this.lineColor = new Color(couleur.getRed(), couleur.getGreen(), couleur.getBlue());
 	}
+
+	public void setPenColor(int r, int g, int b) { // setColor (gestion d'erreur ici?)
+		this.lineColor = new Color(r, g, b);
+	}
 }

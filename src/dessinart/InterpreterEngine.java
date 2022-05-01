@@ -11,7 +11,7 @@ import dessinart.value.*;
 import dessinart.gui.*;
 
 import java.awt.*;
-import java.time.temporal.ValueRange;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,16 +23,14 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
     private Frame currentFrame;
 
-
     private Value result;
 
     private List<Value> argumentValues;
-
-    ////////////////////////////////////////////////////////
     private Dessin monDessin;
 
     public InterpreterEngine(FunctionFinder functionFinder) {
         this.functionFinder = functionFinder;
+
     }
 
     public void visit(Node node){
@@ -104,7 +102,7 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
         this.currentFrame = new Frame(this.currentFrame, null);
         visit(node.getDefs());
-        visit(node.getDecls());
+        //visit(node.getDecls());
         visit(node.getMain());
         this.currentFrame = null;
         montrerDessin();
@@ -112,65 +110,34 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
     @Override
     public void caseADefs(ADefs node) { // Define et création du canvas
-        //System.out.println("passe ici!");
         ADefcan defineCanvas = (ADefcan) node.getDefcan();
-
         TNumber tokenWidth = defineCanvas.getWidth();;
-
-        //Value valWidth = eval(tokenWidth);
-
         int width = Integer.parseInt(tokenWidth.getText());
 
         TNumber tokenHeight = defineCanvas.getHeight();
-        //Value valHeight = eval(tokenHeight);
         int height = Integer.parseInt(tokenHeight.getText());
 
         ADefpen definePen = (ADefpen) node.getDefpen();
-
         TNumber tokenPenWitdh = definePen.getWidth();
-        //Value valPenWidth = eval(tokenPenWitdh);
         int penWidth = Integer.parseInt(tokenPenWitdh.getText());
 
         TNumber tokenPosX = definePen.getPosx();
-        //Value valPosX = eval(tokenPosX);
         int posX = Integer.parseInt(tokenPosX.getText());
 
         TNumber tokenPosY = definePen.getPosy();
-        //Value valPosY = eval(tokenPosY);
         int posY = Integer.parseInt(tokenPosY.getText());
-
-        //this.result = new IntValue(2);
 
         // construction du canvas
         this.monDessin = new Dessin(width, height, posX, posY, penWidth);
         this.monDessin.montrer();
     }
 
+    // -------------------------------------------------------------------------
+    // Déclarations
+    // -------------------------------------------------------------------------
     /*@Override
-    public void caseADefcan(ADefcan node) {
-        System.out.println("passe icitte");
-        Value valWidth = eval(node.getWidth());
-        Value valHeight = eval(node.getHeight());
+    public void caseAVardecl(AVardecl node) {
 
-        int width = ((IntValue) valWidth).getValue();
-        int height = ((IntValue) valHeight).getValue();
-
-        this.monDessin.setDimensions(width, height);
-    }*/
-
-    /*@Override
-    public void caseADefpen(ADefpen node) {
-        Value valPenWidth = eval(node.getWidth());
-        int penWidth = ((IntValue) valPenWidth).getValue();
-
-        Value valPosX = eval(node.getPosx());
-        int posX = ((IntValue) valPosX).getValue();
-
-        Value valPosY = eval(node.getPosy());
-        int posY = ((IntValue) valPosY).getValue();
-
-        this.monDessin.setPenWidth(penWidth);
-        this.monDessin.bougerCrayonAbs(posX, posY);
     }*/
 
     // -------------------------------------------------------------------------
@@ -324,8 +291,6 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
     /////////////////////////////////////////////////////////////////////////////////
     // fonctions math
     ////////////////////////////////////////////////////////////////////////////////
@@ -338,7 +303,6 @@ public class InterpreterEngine extends DepthFirstAdapter {
         int exposant = ((IntValue) vExposant).getValue();
 
         int monResultat = (int) Math.round(Math.pow((double) base, (double) exposant));
-
 
         this.result = new IntValue(monResultat);
     }
@@ -436,6 +400,24 @@ public class InterpreterEngine extends DepthFirstAdapter {
         this.result = new IntValue(monResultat);
     }
 
+    @Override
+    public void caseARandomdeuxcinqcinqMathfcts(ARandomdeuxcinqcinqMathfcts node) { // retourne un chiffre aléatoire entre 0 et 255
+        int monResultat = (int) Math.round(Math.random() * 255);
+        this.result = new IntValue(monResultat);
+    }
+
+    @Override
+    public void caseARandomhundMathfcts(ARandomhundMathfcts node) { // retourne un chiffre aléatoire entre 0 et 100
+        int monResultat = (int) Math.round(Math.random() * 100);
+        this.result = new IntValue(monResultat);
+    }
+
+    @Override
+    public void caseARandomtenMathfcts(ARandomtenMathfcts node) { // retourne un chiffre aléatoire entre 0 et 10
+        int monResultat = (int) Math.round(Math.random() * 10);
+        this.result = new IntValue(monResultat);
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -445,6 +427,17 @@ public class InterpreterEngine extends DepthFirstAdapter {
     public void caseANumberTerm(ANumberTerm node) {
         try{
             this.result = new IntValue(Integer.parseInt(node.getNumber().getText()));
+        } catch (NumberFormatException e){
+            throw new InterpreterException(this.currentFrame, node.getNumber(), "Le nombre entré est trop grand!");
+        }
+    }
+
+    @Override
+    public void caseANegativeTerm(ANegativeTerm node) {
+        try{
+            int value = Integer.parseInt(node.getNumber().getText());
+            int result = 0 - value;
+            this.result = new IntValue(result);
         } catch (NumberFormatException e){
             throw new InterpreterException(this.currentFrame, node.getNumber(), "Le nombre entré est trop grand!");
         }
@@ -493,10 +486,39 @@ public class InterpreterEngine extends DepthFirstAdapter {
         this.result = eval (node.getMathfcts ());
     }
 
-    /*@Override
-    public void caseACallTerm(ACallTerm) {
-        // TODO
-     }*/
+    @Override
+    public void caseACallTerm(ACallTerm node) {
+        List<Value> previousArgumentsValues = this.argumentValues;
+        this.argumentValues = new LinkedList<>();
+        visit(node.getArgs());
+
+        this.currentFrame.setCallLocation(node.getIdent());
+
+        FunctionInfo function = this.functionFinder.getFunctionInfo(node.getIdent().getText());
+        this.currentFrame = new Frame(this.currentFrame, function);
+
+        Iterator<Value> argumentValuesIterator = this.argumentValues.iterator();
+        List<ParamInfo> params = function.getParams();
+        for( ParamInfo param : params) {
+            Value value = argumentValuesIterator.next();
+            this.currentFrame.assignVariable(param.getName().getText(), value);
+        }
+
+        try {
+            visit(function.getBody());
+            throw new InterpreterException(this.currentFrame.getParent(),
+                    node.getIdent(), "La fonction " + node.getIdent().getText()
+                    + " n'a pas retourné de valeur.");
+        }
+        catch (ReturnException e) {
+            // attrappe l'exception de retour
+        }
+
+        this.result = this.currentFrame.getReturnValue();
+        this.argumentValues = previousArgumentsValues;
+        this.currentFrame = this.currentFrame.getParent();
+        this.currentFrame.setCallLocation(null);
+     }
 
     @Override
     public void caseAArg(AArg node) {
@@ -620,13 +642,33 @@ public class InterpreterEngine extends DepthFirstAdapter {
             int diviseur = getNumberRight (right, node.getStar ());
 
             int resultat = divise * diviseur;
-
             this.result = new IntValue(resultat);
 
             return;
         }
 
         throw new InterpreterException(this.currentFrame, node.getStar (),
+                "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
+    }
+
+    @Override
+    public void caseAModSum(AModSum node) {
+        Value left = eval(node.getLeft());
+        Value right = eval(node.getRight());
+
+        if (left instanceof IntValue) {
+
+            int divise = getNumberLeft (left, node.getMod());
+            int diviseur = getNumberRight (right, node.getMod( ));
+
+            int resultat = Math.round (divise % diviseur);
+
+            this.result = new IntValue(resultat);
+
+            return;
+        }
+
+        throw new InterpreterException(this.currentFrame, node.getMod (),
                 "L'expression de gauche n'est ni une chaîne de caractères ni un nombre.");
     }
 

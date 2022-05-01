@@ -17,8 +17,6 @@ public class FunctionFinder extends DepthFirstAdapter {
 
     private Map<Node, Scope> scopes = new HashMap<>();
 
-    private Map<Node, Type> types = new HashMap<>();
-
     private List<ParamInfo> paramList;
 
     public void visit(Node node){
@@ -35,6 +33,9 @@ public class FunctionFinder extends DepthFirstAdapter {
         this.functions.put(functionInfo.getName(), functionInfo);
     }
 
+    ///////////////////////////////////////////////////////////////
+    // fonctions et sketch
+    //-------------------------------------------------------------
     @Override
     public void caseAFunctionFctdecl(AFunctionFctdecl node) {
         this.paramList = new LinkedList<>();
@@ -59,6 +60,7 @@ public class FunctionFinder extends DepthFirstAdapter {
     public void caseAParam(AParam node) {
         this.paramList.add(new ParamInfo(node.getName(), Type.getType(node.getType())));
     }
+    ///////////////////////////////////////////////////////////////////
 
     public FunctionInfo getFunctionInfo(String name){
         return this.functions.get(name);
@@ -70,14 +72,6 @@ public class FunctionFinder extends DepthFirstAdapter {
 
     public Scope getScope(Node key){
         return this.scopes.get(key);
-    }
-
-    public void addType(Node key, Type type){
-        this.types.put(key, type);
-    }
-
-    public Type getType(Node key){
-        return this.types.get(key);
     }
 
 

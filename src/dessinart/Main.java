@@ -13,7 +13,6 @@ import java.io.*;
 
 public class Main {
 
-    private final static String LANGUAGE_NAME = "DessinART";
     public static void main(String[] args) {
 
         // Check if .dsa file is passed as arg.
@@ -46,9 +45,6 @@ public class Main {
             //Interprétation
             InterpreterEngine interp = new InterpreterEngine(functionFinder);
             interp.visit(tree);
-
-            // Affichage final Canvas
-            //interp.montrerDessin();
         }
         catch (FileNotFoundException e) {
             System.err.println("ERREUR: Le fichier \"" + filename
@@ -71,9 +67,9 @@ public class Main {
             System.err.println("ERREUR SÉMANTIQUE: " + e.getMessage());
             System.exit(1);
         }
-        /*catch (InterpreterException e) {
+        catch (InterpreterException e) {
             System.err.println("ERREUR D'EXECUTION: " + e.getMessage());
             System.exit(1);
-        }*/
+        }
     }
 }
