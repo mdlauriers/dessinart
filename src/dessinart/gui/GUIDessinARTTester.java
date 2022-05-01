@@ -36,7 +36,19 @@ public class GUIDessinARTTester {
 		monDessinArt.drawAbs(250, 375);
 		monDessinArt.drawAbs(375, 250);
 
+		monDessinArt.bougerCrayonAbs(250, 250);
+		monDessinArt.setPenWidth(50);
 
+
+		for (int i = 0; i < 255; i++) {
+			System.out.println("ici");
+			//monDessinArt.montrer();
+			monDessinArt.attendre(1000);
+			monDessinArt.setPenColor((int) Math.round(255*Math.random()), (int) Math.round(255*Math.random()), (int) Math.round(255*Math.random()));
+			monDessinArt.drawRel(0, 0);
+
+
+		}
 		// l'afficher
 		//monDessinArt.montrer();
 	}

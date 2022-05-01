@@ -500,4 +500,10 @@ public class VariableAndReturnChecker extends DepthFirstAdapter {
         Type exp = evalType(node.getWidth());
         checkNumber(exp, node.getLPar());
     }
+
+    @Override
+    public void caseAWaitPenfct(AWaitPenfct node) {
+        Type exp = evalType (node.getDelay ());
+        checkNumber (exp, node.getLPar ());
+    }
 }

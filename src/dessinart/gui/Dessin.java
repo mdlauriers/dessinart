@@ -17,11 +17,13 @@ public class Dessin extends JFrame{
 	private Color lineColor = new Color(0, 0, 0);
 	// private Color backGroungColor = new Color(255, 255, 255); // si on veut!
 	private ArrayList<Ligne> lignes;
+	private ArrayList<Ligne> allLignes;
 
 	public Dessin(int x, int y, int penX, int penY, int lineWidth) {
 		this.crayon = new Position(penX, penY);
 		this.trait = lineWidth;
 		this.lignes = new ArrayList<>();
+		this.allLignes = new ArrayList<> ();
 		setTitle("DessinART");
 		try {
 			ImageIcon img = new ImageIcon(this.getClass().getResource("./dessinartbasetransp.png"));
@@ -51,6 +53,10 @@ public class Dessin extends JFrame{
 			System.out.println("Erreur Inconnue"); // TODO
 		}
 
+		this.allLignes.addAll (this.lignes);
+		this.lignes.clear ();
+		//this.lignes = new ArrayList<>(); // vider la liste de lignes
+
 	}
 
 	// Fcts sur le crayon
@@ -68,16 +74,32 @@ public class Dessin extends JFrame{
 	public void drawRel(int depX, int depY) { //draw selon la position de départ (draw)
 		int finX = crayon.getX() + depX;
 		int finY = crayon.getY() + depY;
-		Ligne maLigne = new Ligne(this.crayon, finX, finY, this.trait, this.lineColor);
-		this.lignes.add(maLigne);
+		this.drawAbs (finX, finY);
+		/*Ligne maLigne = new Ligne(this.crayon, finX, finY, this.trait, this.lineColor);
 		bougerCrayonRel(depX, depY);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+
+				lignes.add(maLigne);
+				//bougerCrayonRel(depX, depY);
+			}
+		});
+		//bougerCrayonRel(depX, depY);*/
+
 	}
 
 	public void drawAbs(int xFin, int yFin) { // drawTo/drawAbs
 		//Color maCouleur = new Color(this.lineColor.getRed(), this.lineColor.getGreen(), this.lineColor.getBlue());
 		Ligne maLigne = new Ligne(this.crayon, xFin, yFin, this.trait, this.lineColor);
-		this.lignes.add(maLigne);
 		bougerCrayonAbs(xFin, yFin);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				lignes.add(maLigne);
+			}
+		});
+		//bougerCrayonAbs(xFin, yFin);
 	}
 
 	public void setPenWidth(int width) { // setWidth
@@ -90,5 +112,20 @@ public class Dessin extends JFrame{
 
 	public void setPenColor(int r, int g, int b) { // setColor (gestion d'erreur ici?)
 		this.lineColor = new Color(r, g, b);
+	}
+
+	public void attendre (int milisec) {
+		repaint();
+		//this.montrer();
+		int waitInitTime = (int) System.currentTimeMillis();
+
+		int waitEndTime = waitInitTime + milisec;
+
+		int waitTime = waitInitTime;
+		while (waitTime < waitEndTime) {
+			waitTime = (int) System.currentTimeMillis();
+		}
+
+		//repaint();
 	}
 }

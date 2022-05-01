@@ -74,4 +74,23 @@ dessinart {
     replace(monInt2, monInt9);
     draw(0, 0);
 
+
+
+    replace(250, 250);
+    setWidth(50);
+    int j = 0;
+    while (j < 255) {
+        wait(50);
+        //int monRed = random255();
+        //int monGreen = random255();
+        //int monBlue = random255();
+
+        int monRed = j;
+        int monGreen =  0;
+        int monBlue = j;
+        setColor((monRed, monGreen, monBlue));
+        draw(0, 0);
+        j = j + 1;
+    }
+
 }

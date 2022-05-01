@@ -105,7 +105,8 @@ public class InterpreterEngine extends DepthFirstAdapter {
         //visit(node.getDecls());
         visit(node.getMain());
         this.currentFrame = null;
-        montrerDessin();
+        //montrerDessin();
+        this.monDessin.repaint();
     }
 
     @Override
@@ -287,6 +288,14 @@ public class InterpreterEngine extends DepthFirstAdapter {
         int largeur = ((IntValue) valPenW).getValue();
 
         this.monDessin.setPenWidth(largeur);
+    }
+
+    @Override
+    public void caseAWaitPenfct(AWaitPenfct node) { // attendre un certain nombre de millisecondes avant de continuer
+        Value valWait = eval(node.getDelay ());
+        int delay = ((IntValue) valWait).getValue ();
+
+        this.monDessin.attendre (delay);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
