@@ -13,6 +13,7 @@ Tokens
     divide = '/';
     l_br = '{';
     l_par = '(';
+    mod = '%';
     minus = '-';
     plus = '+';
     r_br = '}';
@@ -62,10 +63,15 @@ Tokens
     draw_to = 'drawTo';
     set_color = 'setColor';
     set_width = 'setWidth';
+    wait = 'wait';
     power = 'power';
     roundfive = 'roundFive';
     roundten = 'roundTen';
     roundhund = 'roundHundred';
+
+    randomdeuxcinqcinq = 'random255';
+    randomcent = 'random100';
+    randomdix = 'random10';
 
     sin = 'sin';
     cos = 'cos';
@@ -116,19 +122,20 @@ Productions
     	{drawabs} draw_to l_par [pos_x]:exp comma [pos_y]:exp r_par |
     	{draw} draw l_par [dist_x]:exp comma [dist_y]:exp r_par |
     	{setcolor} set_color l_par [color]:exp r_par |
-    	{setwidth} set_width l_par [width]:exp r_par;
+    	{setwidth} set_width l_par [width]:exp r_par |
+    	{wait} wait l_par [delay]:exp r_par;
 
     decls = decl*;
 
     decl =
-    	{fct} fctdecl sc |
+    	{fct} fctdecl |
     	{variable} vardecl sc;
 
     vardecl = type ident assign exp;
 
     fctdecl =
-    	{function} func [return_type]:type [name]:ident l_par params r_par l_br block r_br |
-    	{sketch} sketch [name]:ident l_par params r_par l_br block r_br;
+    	{function} func [return_type]:type [name]:ident l_par params? r_par l_br block r_br |
+    	{sketch} sketch [name]:ident l_par params? r_par l_br block r_br;
 
 
    	params =
@@ -150,7 +157,8 @@ Productions
         {add} [left]:sum plus [right]:neg |
         {sub} [left]:sum minus [right]:neg |
         {div} [left]:sum divide [right]:neg |
-        {mul} [left]:sum star [right]: neg |
+        {mul} [left]:sum star [right]:neg |
+        {mod} [left]:sum mod [right]:neg |
         {simple} neg;
 
     neg =
@@ -159,6 +167,7 @@ Productions
 
     term =
         {number} number |
+        {negative} minus number |
         {var} ident |
         {bool} boole |
         {par} l_par exp r_par |
@@ -192,4 +201,7 @@ Productions
     	{log} log l_par [base]:exp comma [logde]:exp r_par |
     	{sin} sin l_par [angle]:exp r_par |
     	{cos} cos l_par [angle]:exp r_par |
-    	{tan} tan l_par [angle]:exp r_par;
+    	{tan} tan l_par [angle]:exp r_par |
+    	{randomdeuxcinqcinq} randomdeuxcinqcinq l_par r_par |
+    	{randomhund} randomcent l_par r_par |
+    	{randomten} randomdix l_par r_par;
