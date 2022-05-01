@@ -59,9 +59,9 @@ dessinart {
 
     int monInt4 = roundTen(-11);
     int monInt5 = log(10, 250) * 125;
-    int monInt6 = sin(90) * monInt5;
-    int monInt7 = cos(0) * monInt6;
-    int monInt8 = tan(45) * monInt7;
+    int monInt6 = sin(90,10) * monInt5;
+    int monInt7 = cos(0,10) * monInt6;
+    int monInt8 = tan(45,10) * monInt7;
 
     int monInt9 = power(monInt, 2);
     int monInt10 = monInt9 + monInt4;
