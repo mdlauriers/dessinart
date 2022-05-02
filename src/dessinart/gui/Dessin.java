@@ -41,6 +41,12 @@ public class Dessin extends JFrame{
 		setVisible(true);
 	}
 
+	public void montrerNoReplace() {
+		setResizable(false);
+		setDefaultCloseOperation(EXIT_ON_CLOSE); //?
+		setVisible(true);
+	}
+
 	public void paint(Graphics g) { // dessiner dans le canvas(JFrame) - appelé automatiquement
 		try {
 			Graphics2D graph = (Graphics2D) g; // faire gestion d'erreur
@@ -53,7 +59,7 @@ public class Dessin extends JFrame{
 			System.out.println("Erreur Inconnue"); // TODO
 		}
 
-		this.allLignes.addAll (this.lignes);
+		this.allLignes.addAll(this.lignes);
 		this.lignes.clear ();
 		//this.lignes = new ArrayList<>(); // vider la liste de lignes
 

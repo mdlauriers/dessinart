@@ -1,0 +1,10 @@
+define canvas(1000,1000);
+define pencil(25,0,0);
+
+dessinart {
+    draw(1000,1000);
+    replace(0,1000);
+    draw(1000,-1000);
+
+}
+

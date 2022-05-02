@@ -106,7 +106,13 @@ public class InterpreterEngine extends DepthFirstAdapter {
         visit(node.getMain());
         this.currentFrame = null;
         //montrerDessin();
-        this.monDessin.repaint();
+        //this.monDessin.repaint();
+        monDessin.attendre(100);
+        this.montrerNoReplace();
+    }
+
+    private void montrerNoReplace() {
+        this.monDessin.montrerNoReplace();
     }
 
     @Override
@@ -219,7 +225,7 @@ public class InterpreterEngine extends DepthFirstAdapter {
 
 
     /////////////////////////////////////////////////////////////////////////////////
-    // fonctions sur le crayon
+    // fonctions sur le crayon et wait
     /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void caseAReplacePenfct(AReplacePenfct node) { // déplacement absolue

@@ -1,0 +1,173 @@
+define canvas(1000,1000);
+define pencil(12,150,150);
+
+dessinart {
+    logo();
+}
+
+sketch logo(){
+        color gris = (156,168,186);
+        color rose = (219,37,80);
+        color jaune = (229, 245, 12);
+
+        // I
+        draw(0,300);
+
+        // N
+        setColor(gris);
+        replace(250,450);
+        draw(0,-300);
+
+        // setColor(rose);
+        replace(250,150);
+        int x = 250;
+        int y = 150;
+        while(y < 450){
+            replace(x,y);
+            draw(0,0);
+
+            if(x % 10 == 0){
+                x = x + 155;
+            }
+            y = y + 1;
+        }
+        drawTo(x, y);
+        drawTo(x, 150);
+
+        // F
+        setColor((110, 175, 235));
+        replace(x+100, 150);
+        drawTo(x+200, 150);
+
+        replace(x+100, 150);
+        draw(0,300);
+
+        replace(x+100, 275);
+        draw(75,0);
+
+
+        // 6
+        setColor((245, 12, 12));
+        replace(150, 500);
+        draw(100,0);
+
+        replace(150,500);
+        draw(0,200);
+        draw(100,0);
+        draw(0,-100);
+        draw(-100,0);
+
+        // 0
+        setColor(jaune);
+        replace(300,500);
+        draw(0,200);
+        draw(100,0);
+        draw(0,-200);
+        draw(-100,0);
+
+        // 0
+        setColor((144, 12, 245));
+        replace(450,500);
+        draw(0,200);
+        draw(100,0);
+        draw(0,-200);
+        draw(-100,0);
+
+        // E
+        color vert = (30, 171, 5);
+        setColor(vert);
+        replace(650,500);
+        draw(100,0);
+
+        replace(650,500);
+        draw(0,200);
+        draw(100,0);
+
+        replace(650,600);
+        draw(60,0);
+
+        while (true) {
+            wait(1000);
+            changeCoul();
+        }
+}
+
+sketch changeCoul(){
+    replace(150, 150);
+    // I
+    draw(0,300);
+
+    // N
+    setColor((random255(), random255(), random255()));
+    replace(250,450);
+    draw(0,-300);
+
+
+    replace(250,150);
+    int x = 250;
+    int y = 150;
+    while(y < 450){
+        //replace(x,y);
+        //draw(0,0);
+
+        if(x % 10 == 0){
+            x = x + 155;
+        }
+        y = y + 1;
+    }
+    drawTo(x, y);
+    drawTo(x, 150);
+
+    // F
+    setColor((random255(), random255(), random255()));
+    replace(x+100, 150);
+    drawTo(x+200, 150);
+
+    replace(x+100, 150);
+    draw(0,300);
+
+    replace(x+100, 275);
+    draw(75,0);
+
+
+    // 6
+    setColor((random255(), random255(), random255()));
+    replace(150, 500);
+    draw(100,0);
+
+    replace(150,500);
+    draw(0,200);
+    draw(100,0);
+    draw(0,-100);
+    draw(-100,0);
+
+    // 0
+    setColor((random255(), random255(), random255()));
+    replace(300,500);
+    draw(0,200);
+    draw(100,0);
+    draw(0,-200);
+    draw(-100,0);
+
+    // 0
+    setColor((random255(), random255(), random255()));
+    replace(450,500);
+    draw(0,200);
+    draw(100,0);
+    draw(0,-200);
+    draw(-100,0);
+
+    // E
+    color vert = (30, 171, 5);
+    setColor((random255(), random255(), random255()));
+    replace(650,500);
+    draw(100,0);
+
+    replace(650,500);
+    draw(0,200);
+    draw(100,0);
+
+    replace(650,600);
+    draw(60,0);
+
+}

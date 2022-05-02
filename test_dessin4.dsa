@@ -2,7 +2,7 @@ define canvas(1000,1000);
 define pencil(12,150,150);
 
 dessinart {
-    logo()
+    logo();
 }
 
 sketch logo(){

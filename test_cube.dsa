@@ -81,16 +81,30 @@ dessinart {
     int j = 0;
     while (j < 255) {
         wait(50);
-        //int monRed = random255();
-        //int monGreen = random255();
-        //int monBlue = random255();
+        int monRed = random255();
+        int monGreen = random255();
+        int monBlue = random255();
 
-        int monRed = j;
-        int monGreen =  0;
-        int monBlue = j;
+        //int monRed = j;
+        //int monGreen =  0;
+        //int monBlue = j;
         setColor((monRed, monGreen, monBlue));
         draw(0, 0);
         j = j + 1;
+
+        unPointRandom();
     }
 
+    unPointRandom();
+
+}
+
+sketch unPointRandom() {
+    int i = random10() * 15;
+    int x = random100() * 4;
+    int y = random100() * 4;
+    setColor((random255(), random255(), random255()));
+    setWidth(i);
+    replace(x, y);
+    draw(0, 0);
 }
